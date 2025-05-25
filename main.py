@@ -15,9 +15,11 @@ app = Flask(__name__)
 def qrmai():
     if request.args.get('token') != config['token']:
         return "error"
-    window = gw.getWindowsWithTitle("微信")[0]
 
-    window.activate()
+    wechat = gw.getWindowsWithTitle("微信")[0]
+    if wechat.isMinimized:
+        wechat.restore()
+    wechat.activate()
 
     def move_click(x, y):
         pyautogui.moveTo(x, y)
@@ -29,6 +31,7 @@ def qrmai():
     time.sleep(2)
     move_click(config["p2"][0], config["p2"][1])
 
+    wechat.minimize()
     time.sleep(2)
     with mss() as sct:
         # 截取整个屏幕
@@ -40,14 +43,26 @@ def qrmai():
 
     qr_img = qrcode.make(decoded_objects[0].data.decode("utf-8"))
 
+    import os
+    # 如果skin.png存在
     img_io = io.BytesIO()
-    qr_img.save(img_io, format='PNG')
+    if "skin.png" in os.listdir():
+        skin = Image.open("skin.png")
+
+        skin.paste(qr_img.resize((504,504)), (142, 1096))
+        skin.save(img_io, format='PNG')
+    else:
+        qr_img.save(img_io, format='PNG')
+
     img_io.seek(0)
 
+    window = gw.getWindowsWithTitle("微信")[0]
+
+    window.close()
     return Response(img_io, mimetype='image/png')
 
 if __name__ == '__main__':
     import json
     with open('config.json', 'r', encoding='utf-8') as f:
         config = json.load(f)
-    app.run(host='127.0.0.1', port=5000)
+    app.run(host=config["host"], port=config["port"])

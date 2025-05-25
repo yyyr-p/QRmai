@@ -1,0 +1,7 @@
+Flask
+pyautogui
+pygetwindow
+qrcode
+Pillow
+mss
+pyzbar
