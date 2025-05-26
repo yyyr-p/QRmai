@@ -1,24 +1,37 @@
 # QRmai
-动态生成舞萌DX登录二维码，灵感来源于[MaimaiHelper](https://github.com/SomeUtils/MaimaiHelper)
+
+> 帮您在只有基本联网安卓设备（如：手表、翻盖手机）的情况下也能轻松出勤！
+
+在服务端中获取二维码并将图片返回到客户端，灵感来源于[MaimaiHelper](https://github.com/SomeUtils/MaimaiHelper)
 
 ## 为什么使用QRmai而不是使用MaimaiHelper
-1. QRmai无需配置运行环境
-2. QRmai具有更多的自定义选项
-3. QRmai兼容MaimaiHelper APP
+
+1. 具有更多的自定义选项
+2. 兼容MaimaiHelper APP
 
 ## 部署教程
+
 1. 安装[Python3](https://www.python.org/downloads/)
 2. 安装依赖
+
 ```bash
 pip install -r requirements.txt
 ```
+
 3. 运行main.py
+
 ```bash
 python main.py
 ```
+
 4. 访问http://127.0.0.1:5000/qrmai?token=qrmai
 
+## 皮肤
+
+将你下载好的皮肤放在程序同目录，并重命名为skin.png
+
 ## 配置文件
+
 ```
 {
   "p1": [1087, 799], // 舞萌 | 中二服务号生成二维码按钮的位置

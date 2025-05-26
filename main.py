@@ -48,8 +48,16 @@ def qrmai():
     img_io = io.BytesIO()
     if "skin.png" in os.listdir():
         skin = Image.open("skin.png")
+        qr_img = qr_img.convert('RGBA')
+        width, height = qr_img.size
+        for x in range(width):
+            for y in range(height):
+                r, g, b, a = qr_img.getpixel((x, y))  # 获取当前像素的颜色值
+                if r > 200 and g > 200 and b > 200:  # 判断是否为接近白色的像素
+                    qr_img.putpixel((x, y), (255, 255, 255, 0))  # 替换为透明像素
+        resized_qr = qr_img.resize((576, 576))
+        skin.paste(resized_qr, (106, 1060), mask=resized_qr)  # 使用 resize 后的图像作为 mask
 
-        skin.paste(qr_img.resize((504,504)), (142, 1096))
         skin.save(img_io, format='PNG')
     else:
         qr_img.save(img_io, format='PNG')
