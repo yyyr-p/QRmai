@@ -9,6 +9,12 @@
 1. 具有更多的自定义选项
 2. 兼容MaimaiHelper APP
 
+## 下载
+
+[123云盘](https://www.123865.com/s/4FlLVv-yI48d)
+
+[Github Release](https://github.com/SodaCodeSave/QRmai/releases/latest)
+
 ## 部署教程
 
 1. 安装[Python3](https://www.python.org/downloads/)
@@ -29,6 +35,8 @@ python main.py
 ## 皮肤
 
 将你下载好的皮肤放在程序同目录，并重命名为skin.png
+
+制作好的皮肤可以在这里下载：[123云盘](https://www.123865.com/s/4FlLVv-yI48d)
 
 ## 配置文件
 
