@@ -4,10 +4,11 @@
 
 在服务端中获取二维码并将图片返回到客户端，灵感来源于[MaimaiHelper](https://github.com/SomeUtils/MaimaiHelper)
 
-## 为什么使用QRmai而不是使用MaimaiHelper
+## 为什么使用QRmai
 
 1. 具有更多的自定义选项
 2. 兼容MaimaiHelper APP
+3. 想不出来了
 
 ## 下载
 
