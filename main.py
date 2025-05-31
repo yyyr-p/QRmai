@@ -11,7 +11,11 @@ from pyzbar.pyzbar import decode
 
 app = Flask(__name__)
 
+# 添加全局变量用于缓存
 request_lock = False
+last_qr_bytes = None
+last_qr_time = 0
+CACHE_DURATION = 60  # 缓存有效期（秒）
 
 def qrmai_action():
     wechat = gw.getWindowsWithTitle("微信")[0]
@@ -72,7 +76,12 @@ def qrmai():
     if request.args.get('token') != config['token']:
         return Response('403 Forbidden', status=403)
 
-    global request_lock
+    global request_lock, last_qr_bytes, last_qr_time
+
+    current_time = time.time()
+    # 检查缓存是否有效
+    if last_qr_bytes and (current_time - last_qr_time) < CACHE_DURATION:
+        return Response(io.BytesIO(last_qr_bytes), mimetype='image/png')
     
     # 检查是否有正在进行的请求
     if request_lock:
@@ -83,7 +92,9 @@ def qrmai():
     try:
         img_io = qrmai_action()
         img_io.seek(0)
-        return Response(img_io, mimetype='image/png')
+        last_qr_bytes = img_io.getvalue()
+        last_qr_time = current_time
+        return Response(io.BytesIO(last_qr_bytes), mimetype='image/png')
     finally:
         # 释放锁
         request_lock = False
