@@ -15,7 +15,6 @@ app = Flask(__name__)
 request_lock = False
 last_qr_bytes = None
 last_qr_time = 0
-CACHE_DURATION = 60  # 缓存有效期（秒）
 
 def qrmai_action():
     wechat = gw.getWindowsWithTitle("微信")[0]
@@ -79,8 +78,10 @@ def qrmai():
     global request_lock, last_qr_bytes, last_qr_time
 
     current_time = time.time()
+    cache_duration = config.get('cache_duration', 60)
+
     # 检查缓存是否有效
-    if last_qr_bytes and (current_time - last_qr_time) < CACHE_DURATION:
+    if last_qr_bytes and (current_time - last_qr_time) < cache_duration:
         return Response(io.BytesIO(last_qr_bytes), mimetype='image/png')
     
     # 检查是否有正在进行的请求
