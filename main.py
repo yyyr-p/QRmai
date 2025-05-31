@@ -68,7 +68,7 @@ def qrmai_action():
 @app.route('/qrmai')
 def qrmai():
     if request.args.get('token') != config['token']:
-        return "error"
+        return Response('403 Forbidden', status=403)
 
     img_io = qrmai_action()
     img_io.seek(0)
