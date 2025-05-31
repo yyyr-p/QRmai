@@ -11,6 +11,8 @@ from pyzbar.pyzbar import decode
 
 app = Flask(__name__)
 
+request_lock = False
+
 def qrmai_action():
     wechat = gw.getWindowsWithTitle("微信")[0]
     if wechat.isMinimized:
@@ -70,9 +72,21 @@ def qrmai():
     if request.args.get('token') != config['token']:
         return Response('403 Forbidden', status=403)
 
-    img_io = qrmai_action()
-    img_io.seek(0)
-    return Response(img_io, mimetype='image/png')
+    global request_lock
+    
+    # 检查是否有正在进行的请求
+    if request_lock:
+        return Response("服务器繁忙，请稍后再试。", status=429)
+
+    # 设置锁
+    request_lock = True
+    try:
+        img_io = qrmai_action()
+        img_io.seek(0)
+        return Response(img_io, mimetype='image/png')
+    finally:
+        # 释放锁
+        request_lock = False
 
 if __name__ == '__main__':
     import json
