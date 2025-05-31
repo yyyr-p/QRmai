@@ -12,7 +12,9 @@ from pyzbar.pyzbar import decode
 app = Flask(__name__)
 
 def qrmai_action():
-    wechat = gw.getWindowsWithTitle("微信")[0]
+    # 根据配置选择窗口标题
+    window_title = "舞萌丨中二" if config.get('standalone_mode', False) else "微信"
+    wechat = gw.getWindowsWithTitle(window_title)[0]
     if wechat.isMinimized:
         wechat.restore()
     wechat.activate()
