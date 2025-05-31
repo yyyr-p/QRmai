@@ -79,14 +79,14 @@ def qrmai():
 
     current_time = time.time()
     cache_duration = config.get('cache_duration', 60)
-
+    
+    # 如果有正在进行的请求，等待直到请求完成
+    while request_lock:
+        time.sleep(0.5)
+        
     # 检查缓存是否有效
     if last_qr_bytes and (current_time - last_qr_time) < cache_duration:
         return Response(io.BytesIO(last_qr_bytes), mimetype='image/png')
-    
-    # 检查是否有正在进行的请求
-    if request_lock:
-        return Response("服务器繁忙，请稍后再试。", status=429)
 
     # 设置锁
     request_lock = True
