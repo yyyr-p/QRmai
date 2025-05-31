@@ -11,11 +11,7 @@ from pyzbar.pyzbar import decode
 
 app = Flask(__name__)
 
-@app.route('/qrmai')
-def qrmai():
-    if request.args.get('token') != config['token']:
-        return "error"
-
+def qrmai_action():
     wechat = gw.getWindowsWithTitle("微信")[0]
     if wechat.isMinimized:
         wechat.restore()
@@ -65,8 +61,17 @@ def qrmai():
     img_io.seek(0)
 
     window = gw.getWindowsWithTitle("微信")[0]
-
     window.close()
+
+    return img_io
+
+@app.route('/qrmai')
+def qrmai():
+    if request.args.get('token') != config['token']:
+        return "error"
+
+    img_io = qrmai_action()
+    img_io.seek(0)
     return Response(img_io, mimetype='image/png')
 
 if __name__ == '__main__':
